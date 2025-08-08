@@ -2,6 +2,10 @@
 export APPDATA=$HOME/dockerAppdata/big-bear-n8n
 mkdir -p "$APPDATA/.n8n" "$APPDATA/pgdata" "$APPDATA/db"
 
+# Stop and clean up previous pod if exists
+podman pod stop n8n-pod
+podman pod rm -f n8n-pod
+
 # OPTIONAL: Create empty init script if it doesn't exist
 touch "$APPDATA/db/init-data.sh"
 chmod +x "$APPDATA/db/init-data.sh"
@@ -13,7 +17,6 @@ podman pod exists big-bear-n8n-pod || podman pod create --name big-bear-n8n-pod 
 podman run -d \
   --pod big-bear-n8n-pod \
   --name db-n8n \
-  --restart=unless-stopped \
   --restart=unless-stopped \
   -e POSTGRES_USER=bigbearcasaos \
   -e POSTGRES_PASSWORD=bigbearcasaos \
