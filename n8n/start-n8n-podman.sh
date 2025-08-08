@@ -13,7 +13,7 @@ podman pod exists big-bear-n8n-pod || podman pod create --name big-bear-n8n-pod 
 podman run -d \
   --pod big-bear-n8n-pod \
   --name db-n8n \
- # --hostname db-n8n \
+  --restart=unless-stopped \
   --restart=unless-stopped \
   -e POSTGRES_USER=bigbearcasaos \
   -e POSTGRES_PASSWORD=bigbearcasaos \
