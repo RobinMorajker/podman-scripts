@@ -1,17 +1,20 @@
+#!/bin/sh
+
 # Set and create APPDATA folder
 export APPDATA=$HOME/dockerAppdata/big-bear-n8n
 mkdir -p "$APPDATA/.n8n" "$APPDATA/pgdata" "$APPDATA/db"
 
-# Stop and clean up previous pod if exists
-podman pod stop n8n-pod
-podman pod rm -f n8n-pod
+# Clean up previous containers if exist
+podman container exists db-n8n && podman rm -f db-n8n
+podman container exists n8n && podman rm -f n8n
+podman pod exists big-bear-n8n-pod && podman pod rm -f big-bear-n8n-pod
 
 # OPTIONAL: Create empty init script if it doesn't exist
 touch "$APPDATA/db/init-data.sh"
 chmod +x "$APPDATA/db/init-data.sh"
 
 # Create the pod and expose port 5678
-podman pod exists big-bear-n8n-pod || podman pod create --name big-bear-n8n-pod -p 5678:5678
+podman pod create --name big-bear-n8n-pod -p 5678:5678
 
 # PostgreSQL container
 podman run -d \
@@ -33,7 +36,6 @@ podman run -d \
 podman run -d \
   --pod big-bear-n8n-pod \
   --name n8n \
-#  --hostname n8n \
   --restart=unless-stopped \
   -e DB_TYPE=postgresdb \
   -e DB_POSTGRESDB_HOST=db-n8n \
