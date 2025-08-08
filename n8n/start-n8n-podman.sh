@@ -7,7 +7,7 @@ touch "$APPDATA/db/init-data.sh"
 chmod +x "$APPDATA/db/init-data.sh"
 
 # Create the pod and expose port 5678
-podman pod create --name big-bear-n8n-pod -p 5678:5678
+podman pod exists big-bear-n8n-pod || podman pod create --name big-bear-n8n-pod -p 5678:5678
 
 # PostgreSQL container
 podman run -d \
