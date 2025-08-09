@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Set and create APPDATA folder
-export APPDATA=$HOME/dockerAppdata/big-bear-n8n
+export APPDATA=/data/com.termux/files/home/podman-scripts/n8n/big-bear-n8n
 mkdir -p "$APPDATA/.n8n" "$APPDATA/pgdata" "$APPDATA/db"
 
 # Clean up previous containers if exist
